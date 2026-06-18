@@ -11,7 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     slate: 'bg-slate-800',
   };
   
-  const headerClass = `${themeClasses[settings.themeColor] || themeClasses['emerald']} text-white shadow-md z-10 sticky top-0`;
+  const headerClass = `${themeClasses[settings?.themeColor] || themeClasses['emerald']} text-white shadow-md z-10 sticky top-0`;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans flex flex-col">
@@ -20,7 +20,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-white/20 rounded-lg">
-                {settings.logoUrl ? (
+                {settings?.logoUrl ? (
                   <img src={settings.logoUrl} alt="Logo" className="h-6 w-auto object-contain" />
                 ) : (
                   <BookOpen className="h-6 w-6 text-white" />

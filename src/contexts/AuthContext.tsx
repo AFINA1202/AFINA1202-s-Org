@@ -55,11 +55,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSettings({ logoUrl: data.logo_url || '', themeColor: data.theme_color || 'emerald' });
       } else {
         const localSettings = localStorage.getItem('mekar_settings');
-        if (localSettings) setSettings(JSON.parse(localSettings));
+        if (localSettings) {
+          try {
+            const parsed = JSON.parse(localSettings);
+            if (parsed && typeof parsed === 'object') {
+              setSettings({
+                logoUrl: parsed.logoUrl || '',
+                themeColor: parsed.themeColor || 'emerald'
+              });
+            }
+          } catch(e) {}
+        }
       }
     } catch {
       const localSettings = localStorage.getItem('mekar_settings');
-      if (localSettings) setSettings(JSON.parse(localSettings));
+      if (localSettings) {
+        try {
+          const parsed = JSON.parse(localSettings);
+          if (parsed && typeof parsed === 'object') {
+            setSettings({
+              logoUrl: parsed.logoUrl || '',
+              themeColor: parsed.themeColor || 'emerald'
+            });
+          }
+        } catch(e) {}
+      }
     }
   };
 
