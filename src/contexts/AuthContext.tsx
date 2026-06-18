@@ -35,6 +35,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<SiteSettings>({ logoUrl: '', themeColor: 'emerald' });
 
+  useEffect(() => {
+    document.title = 'E-LKPD MEKAR';
+    if (settings.logoUrl) {
+      let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      link.href = settings.logoUrl;
+    }
+  }, [settings.logoUrl]);
+
   const fetchSettings = async () => {
     try {
       const { data, error } = await supabase.from('site_settings').select('*').single();
