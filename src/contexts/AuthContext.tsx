@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     document.title = 'E-LKPD MEKAR';
-    if (settings.logoUrl) {
+    if (settings?.logoUrl) {
       let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
       if (!link) {
         link = document.createElement('link');
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       link.href = settings.logoUrl;
     }
-  }, [settings.logoUrl]);
+  }, [settings?.logoUrl]);
 
   const fetchSettings = async () => {
     try {

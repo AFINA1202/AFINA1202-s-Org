@@ -5,6 +5,7 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Login from './pages/Login';
 import DashboardRouter from './pages/DashboardRouter';
 import { Layout } from './components/Layout';
@@ -20,23 +21,25 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/*" 
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <DashboardRouter />
-                </Layout>
-              </PrivateRoute>
-            } 
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/*" 
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <DashboardRouter />
+                  </Layout>
+                </PrivateRoute>
+              } 
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

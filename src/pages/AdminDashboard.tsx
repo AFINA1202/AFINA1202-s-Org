@@ -8,8 +8,8 @@ import { supabase } from '../lib/supabase';
 export default function AdminDashboard() {
   const { settings, updateSettings } = useAuth();
   
-  const [logoUrl, setLogoUrl] = useState(settings.logoUrl);
-  const [themeColor, setThemeColor] = useState(settings.themeColor);
+  const [logoUrl, setLogoUrl] = useState(settings?.logoUrl || '');
+  const [themeColor, setThemeColor] = useState(settings?.themeColor || 'emerald');
   const [isSaving, setIsSaving] = useState(false);
   
   const [pendingUsers, setPendingUsers] = useState<any[]>([]);
