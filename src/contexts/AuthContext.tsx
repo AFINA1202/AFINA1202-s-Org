@@ -228,7 +228,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         is_approved: false
       });
       if (insertError) {
-        console.warn("Catatan: Tabel user_roles belum diizinkan insert atau belum dibuat, data tersimpan di auth metadata", insertError.message);
+        console.error("Gagal menyimpan ke user_roles:", insertError);
+        // Jika gagal insert table karena RLS, kita mungkin tetap perlu memberitahu pengguna 
+        // tapi data auth sudah terlanjur dibuat di Supabase.
       }
       return { error: null, pending: true };
     }
