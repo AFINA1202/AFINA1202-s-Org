@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Download, ExternalLink, Terminal, Copy } from 'lucide-react';
+import { useLKPD } from '../../contexts/LKPDContext';
 
 export default function Activity3Step() {
   const [copied, setCopied] = useState(false);
+  const { data: lkpdData, updateData } = useLKPD();
 
   // Generate CSV content
   const csvContent = `Wilayah,Curah_Hujan,Hasil_Panen
@@ -161,15 +163,15 @@ analisis_regresi(data_wonosari, 'Wonosari')`;
               <tbody>
                 <tr className="border-b border-slate-200">
                   <td className="px-4 py-3 font-medium bg-slate-50">Jedong</td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_jedong_coef'] || ''} onChange={(e) => updateData('activity3_jedong_coef', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_jedong_inter'] || ''} onChange={(e) => updateData('activity3_jedong_inter', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_jedong_r2'] || ''} onChange={(e) => updateData('activity3_jedong_r2', e.target.value)} /></td>
                 </tr>
                 <tr className="border-b border-slate-200">
                   <td className="px-4 py-3 font-medium bg-slate-50">Wonosari</td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_wonosari_coef'] || ''} onChange={(e) => updateData('activity3_wonosari_coef', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_wonosari_inter'] || ''} onChange={(e) => updateData('activity3_wonosari_inter', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" value={lkpdData['activity3_wonosari_r2'] || ''} onChange={(e) => updateData('activity3_wonosari_r2', e.target.value)} /></td>
                 </tr>
               </tbody>
             </table>

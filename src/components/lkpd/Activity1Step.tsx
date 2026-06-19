@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import ScatterPlotCanvas from './ScatterPlotCanvas';
+import { useLKPD } from '../../contexts/LKPDContext';
 
 const INITIAL_WONOSARI = [
   { tahun: 2020, hujan: 2800, panen: 520 },
@@ -21,6 +22,7 @@ const INITIAL_JEDONG = [
 export default function Activity1Step() {
   const [activeTab, setActiveTab] = useState<'wonosari' | 'jedong'>('wonosari');
   const data = activeTab === 'wonosari' ? INITIAL_WONOSARI : INITIAL_JEDONG;
+  const { data: lkpdData, updateData } = useLKPD();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -93,11 +95,17 @@ export default function Activity1Step() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Nilai <i>r</i> (Manual) Desa Wonosari</label>
-              <input type="number" step="0.01" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Contoh: -0.85" />
+              <input type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Contoh: -0.85" 
+                value={lkpdData['activity1_wonosari_r'] || ''}
+                onChange={(e) => updateData('activity1_wonosari_r', e.target.value)}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Nilai <i>r</i> (Manual) Desa Jedong</label>
-              <input type="number" step="0.01" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Contoh: -0.85" />
+              <input type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Contoh: -0.85" 
+                value={lkpdData['activity1_jedong_r'] || ''}
+                onChange={(e) => updateData('activity1_jedong_r', e.target.value)}
+              />
             </div>
           </div>
         </CardContent>

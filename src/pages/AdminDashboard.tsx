@@ -28,19 +28,16 @@ export default function AdminDashboard() {
       // Fetch from Supabase
       const { data } = await supabase.from('user_roles').select('*');
       
-      // Also fetch from local storage for demo
-      const localUsers = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-      
-      const allUsers = [...(data || []), ...localUsers].filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+      const allUsers = data || [];
       
       setPendingUsers(allUsers.filter(u => !u.is_approved && u.role !== 'admin'));
       setApprovedGurus(allUsers.filter(u => u.is_approved && u.role === 'guru'));
       setApprovedSiswas(allUsers.filter(u => u.is_approved && u.role === 'siswa'));
-    } catch {
-      const localUsers = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-      setPendingUsers(localUsers.filter((u: any) => !u.is_approved && u.role !== 'admin'));
-      setApprovedGurus(localUsers.filter((u: any) => u.is_approved && u.role === 'guru'));
-      setApprovedSiswas(localUsers.filter((u: any) => u.is_approved && u.role === 'siswa'));
+    } catch (e) {
+      console.error(e);
+      setPendingUsers([]);
+      setApprovedGurus([]);
+      setApprovedSiswas([]);
     } finally {
       setIsLoadingUsers(false);
     }
@@ -53,14 +50,11 @@ export default function AdminDashboard() {
     alert('Pengaturan berhasil disimpan!');
   };
 
-  const handleApprove = async (userId: string, isLocal: boolean) => {
+  const handleApprove = async (userId: string) => {
     try {
-      if (isLocal) {
-        const localUsers = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-        const updated = localUsers.map((u: any) => u.id === userId ? { ...u, is_approved: true } : u);
-        localStorage.setItem('mekar_users', JSON.stringify(updated));
-      } else {
-        await supabase.from('user_roles').update({ is_approved: true }).eq('id', userId);
+      const { error } = await supabase.from('user_roles').update({ is_approved: true }).eq('id', userId);
+      if (error) {
+        throw error;
       }
       fetchUsers();
     } catch (e) {
@@ -69,15 +63,12 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleReject = async (userId: string, isLocal: boolean) => {
+  const handleReject = async (userId: string) => {
     if (!confirm('Apakah Anda yakin ingin menolak dan menghapus pengguna ini?')) return;
     try {
-      if (isLocal) {
-        const localUsers = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-        const updated = localUsers.filter((u: any) => u.id !== userId);
-        localStorage.setItem('mekar_users', JSON.stringify(updated));
-      } else {
-        await supabase.from('user_roles').delete().eq('id', userId);
+      const { error } = await supabase.from('user_roles').delete().eq('id', userId);
+      if (error) {
+        throw error;
       }
       fetchUsers();
     } catch (e) {
@@ -161,10 +152,10 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id, !!user.username)}>
+                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id)}>
                         <X className="w-4 h-4 mr-1" /> Tolak
                       </Button>
-                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={() => handleApprove(user.id, !!user.username)}>
+                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={() => handleApprove(user.id)}>
                         <Check className="w-4 h-4 mr-1" /> Setujui
                       </Button>
                     </div>
@@ -200,7 +191,7 @@ export default function AdminDashboard() {
                       <div className="text-xs text-slate-500">{user.email || user.username}</div>
                     </div>
                     <div>
-                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id, !!user.username)}>
+                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id)}>
                         <X className="w-4 h-4" /> Hapus
                       </Button>
                     </div>
@@ -234,7 +225,7 @@ export default function AdminDashboard() {
                       <div className="text-xs text-slate-500">{user.email || user.username}</div>
                     </div>
                     <div>
-                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id, !!user.username)}>
+                      <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50" onClick={() => handleReject(user.id)}>
                         <X className="w-4 h-4" /> Hapus
                       </Button>
                     </div>

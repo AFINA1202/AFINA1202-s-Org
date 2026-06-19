@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Copy, ExternalLink, Bot } from 'lucide-react';
+import { useLKPD } from '../../contexts/LKPDContext';
 
 export default function Activity2Step() {
   const [copied, setCopied] = useState(false);
+  const { data: lkpdData, updateData } = useLKPD();
   const promptText = "Tolong hitungkan nilai korelasi dan persamaan regresi linear sederhana antara data curah hujan (sebagai X) dan hasil panen kacang mete (sebagai Y) untuk dua desa berikut.\n\nData Wonosari:\n2020: X=2800, Y=520\n2021: X=2500, Y=570\n2022: X=2300, Y=640\n2023: X=2100, Y=710\n2024: X=2600, Y=600\n\nData Jedong:\n2020: X=3000, Y=480\n2021: X=2700, Y=530\n2022: X=2400, Y=610\n2023: X=2000, Y=750\n2024: X=2200, Y=680\n\nJelaskan maknanya.";
 
   const handleCopy = () => {
@@ -71,13 +73,13 @@ export default function Activity2Step() {
               <tbody>
                 <tr className="border-b border-slate-200">
                   <td className="px-4 py-3 font-medium bg-slate-50">Nilai r (Hitungan KA)</td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." value={lkpdData['activity2_wonosari_r'] || ''} onChange={(e) => updateData('activity2_wonosari_r', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." value={lkpdData['activity2_jedong_r'] || ''} onChange={(e) => updateData('activity2_jedong_r', e.target.value)} /></td>
                 </tr>
                 <tr className="border-b border-slate-200">
                   <td className="px-4 py-3 font-medium bg-slate-50">Persamaan Regresi (KA)</td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." /></td>
-                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." value={lkpdData['activity2_wonosari_eq'] || ''} onChange={(e) => updateData('activity2_wonosari_eq', e.target.value)} /></td>
+                  <td className="px-4 py-2 border-l border-slate-200"><input type="text" className="w-full bg-transparent outline-none focus:border-b-2 focus:border-emerald-500 py-1" placeholder="..." value={lkpdData['activity2_jedong_eq'] || ''} onChange={(e) => updateData('activity2_jedong_eq', e.target.value)} /></td>
                 </tr>
               </tbody>
             </table>
@@ -86,7 +88,10 @@ export default function Activity2Step() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Adakah perbedaan antara hasil hitungan manual Anda dan KA? Mengapa bisa terjadi perbedaan?</label>
-              <textarea className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none min-h-[100px]" placeholder="Tuliskan analisis atau refleksi Anda di sini..."></textarea>
+              <textarea className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none min-h-[100px]" placeholder="Tuliskan analisis atau refleksi Anda di sini..."
+               value={lkpdData['activity2_answer'] || ''}
+               onChange={(e) => updateData('activity2_answer', e.target.value)}
+              ></textarea>
             </div>
           </div>
         </CardContent>

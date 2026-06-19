@@ -163,19 +163,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error: null };
     }
 
-    // Check local storage first
-    const users = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-    const localUser = users.find((u: any) => u.username === username && u.password === password && u.role === role);
-    
-    if (localUser) {
-      if (role !== 'admin' && !localUser.is_approved) {
-        return { error: new Error('Akun Anda belum disetujui oleh Administrator.') };
-      }
-      setUser(localUser);
-      localStorage.setItem('mekar_demo_user', JSON.stringify(localUser));
-      return { error: null };
-    }
-
     const email = `${username}_${role}@mekar.id`.toLowerCase().replace(/\s+/g, '');
     const { data: authData, error } = await supabase.auth.signInWithPassword({
       email,
@@ -204,8 +191,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { username, password, role, full_name } = metadata;
     const email = `${username}_${role}@mekar.id`.toLowerCase().replace(/\s+/g, '');
     
-    // Fallback to local storage immediately if not using a real Supabase instance that allows anonymous signups
-    // Supabase can sometimes block too many signups from same IP. We'll attempt Supabase, but fallback cleanly.
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -219,6 +204,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
+    if (error) {
+      console.warn("Supabase auth failed:", error.message);
+      return { error };
+    }
+
     if (data?.user) {
       // Attempt to save to public user_roles table
       const { error: insertError } = await supabase.from('user_roles').insert({
@@ -227,34 +217,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         full_name: full_name,
         is_approved: false
       });
-      if (insertError) {
+      if (insertError && insertError.code !== '23505') {
         console.error("Gagal menyimpan ke user_roles:", insertError);
-        // Jika gagal insert table karena RLS, kita mungkin tetap perlu memberitahu pengguna 
-        // tapi data auth sudah terlanjur dibuat di Supabase.
       }
-      return { error: null, pending: true };
-    }
-
-    if (error) {
-      console.warn("Supabase auth failed, using local storage", error.message);
-      const users = JSON.parse(localStorage.getItem('mekar_users') || '[]');
-      
-      // Check if user already exists
-      if (users.some((u: any) => u.username === username && u.role === role)) {
-        return { error: new Error("Username sudah digunakan") };
-      }
-
-      const newUser = {
-        id: `local-${Date.now()}`,
-        email,
-        role,
-        name: full_name,
-        is_approved: false,
-        ...metadata
-      };
-      users.push(newUser);
-      localStorage.setItem('mekar_users', JSON.stringify(users));
-      // No longer automatically logged in
       return { error: null, pending: true };
     }
     

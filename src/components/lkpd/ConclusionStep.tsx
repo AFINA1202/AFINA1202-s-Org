@@ -1,7 +1,10 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Lightbulb } from 'lucide-react';
+import { useLKPD } from '../../contexts/LKPDContext';
 
 export default function ConclusionStep() {
+  const { data: lkpdData, updateData } = useLKPD();
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <Card>
@@ -22,6 +25,8 @@ export default function ConclusionStep() {
               <textarea 
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none min-h-[100px] bg-white text-slate-700" 
                 placeholder="Tuliskan alasan Anda..."
+                value={lkpdData['conclusion_1'] || ''}
+                onChange={(e) => updateData('conclusion_1', e.target.value)}
               ></textarea>
             </div>
 
@@ -30,6 +35,8 @@ export default function ConclusionStep() {
               <textarea 
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none min-h-[120px] bg-white text-slate-700" 
                 placeholder="Sebutkan desanya dan jelaskan alasannya berdasarkan data yang sudah Anda proses..."
+                value={lkpdData['conclusion_2'] || ''}
+                onChange={(e) => updateData('conclusion_2', e.target.value)}
               ></textarea>
             </div>
           </div>
