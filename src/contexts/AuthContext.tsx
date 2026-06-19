@@ -206,6 +206,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.warn("Supabase auth failed:", error.message);
+      if (error.message.toLowerCase().includes('rate limit')) {
+        return { error: new Error('Terlalu banyak mencoba mendaftar (Rate limit Supabase). Silakan minta Administrator untuk menaikkan "Signups per hour" di menu Supabase: Authentication -> Rate Limits.') };
+      }
       return { error };
     }
 
