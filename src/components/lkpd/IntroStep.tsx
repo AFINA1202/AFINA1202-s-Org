@@ -6,25 +6,33 @@ export default function IntroStep() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <Card>
         <CardContent className="p-8">
-          <div className="aspect-video bg-slate-900 rounded-xl relative overflow-hidden flex items-center justify-center mb-8 group cursor-pointer">
-            <img 
-              src="https://images.unsplash.com/photo-1596484552834-6a58f4fa1859?q=80&w=1200&auto=format&fit=crop" 
-              alt="Perkebunan Kacang Mete" 
-              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
-            />
-            <div className="relative z-10 flex flex-col items-center">
-              <PlayCircle className="w-16 h-16 text-white opacity-90 group-hover:scale-110 transition-transform" />
-              <p className="text-white mt-4 font-medium tracking-wide">Tonton Pengantar: Bertani Mete di Ngoro</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="aspect-video bg-slate-100 rounded-xl overflow-hidden shadow-sm">
+              <img 
+                src="https://lh3.googleusercontent.com/d/1qZfHyW8o-T_hhAAygjxkEnMpnOWU0fZT" 
+                alt="Pertanian Mete Jedong" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="aspect-video bg-slate-100 rounded-xl overflow-hidden shadow-sm">
+              <img 
+                src="https://lh3.googleusercontent.com/d/1AzQkOwODJBsc1-aY9KoVGSR2XtXZ8ndu" 
+                alt="Pertanian Mete Wonosari" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
             </div>
           </div>
 
           <div className="prose prose-slate max-w-none">
             <h3 className="text-2xl font-bold text-slate-800 mb-4">Mengenal Potensi Lokal: Kacang Mete</h3>
-            <p className="text-slate-600 leading-relaxed text-lg mb-4">
-              Desa Jedong dan Wonosari di Kecamatan Ngoro, Kabupaten Mojokerto dikenal sebagai daerah penghasil kacang mete. Hamparan kebun mete tumbuh subur di lereng perbukitan dan menjadi sumber penghidupan warga.
+            <p className="text-slate-600 leading-relaxed text-lg mb-4 text-justify">
+              Desa Jedong dan Wonosari, yang terletak di Kecamatan Ngoro, Kabupaten Mojokerto, dikenal sebagai dua daerah dengan potensi pertanian kacang mete yang cukup besar. Hamparan kebun mete yang tumbuh subur di lereng perbukitan menjadi sumber penghidupan bagi banyak keluarga di sekitar wilayah ini. Setiap tahun, para petani memanen biji mete yang nantinya dijual ke pasar lokal bahkan hingga ke luar daerah.
             </p>
-            <p className="text-slate-600 leading-relaxed text-lg mb-4">
-              Meski berdekatan (berjarak sekitar 6 km), kedua desa ini memiliki iklim mikro dan kontur geografis yang berbeda. Wonosari relatif datar, sedangkan Jedong lebih tinggi dan berbukit. Perbedaan kondisi ini memengaruhi hasil panen dari tahun ke tahun.
+            <p className="text-slate-600 leading-relaxed text-lg mb-4 text-justify">
+              Meskipun sama-sama berada dalam satu kecamatan, jarak kedua desa ini mencapai sekitar 6 kilometer dengan kondisi geografis dan iklim mikro yang berbeda. Desa Wonosari terletak di daerah yang relatif lebih datar sedangkan Desa Jedong berada di wilayah yang lebih tinggi dan berbukit dengan udara yang lebih sejuk dan tingkat kelembapan yang berbeda.
+            </p>
+            <p className="text-slate-600 leading-relaxed text-lg mb-4 text-justify">
+              Perbedaan kondisi geografis ini sering menimbulkan variasi dalam hasil panen kacang mete. Beberapa tahun menunjukkan hasil panen yang tinggi di Wonosari, sementara Jedong justru mengalami penurunan dan begitu pula sebaliknya. Masyarakat setempat menduga bahwa faktor cuaca, terutama curah hujan tahunan, sangat memengaruhi produktivitas mete.
             </p>
             
             <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6 mt-8">

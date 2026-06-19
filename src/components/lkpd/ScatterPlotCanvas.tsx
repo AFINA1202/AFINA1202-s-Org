@@ -57,41 +57,71 @@ export default function ScatterPlotCanvas({ targetData, id, title }: ScatterPlot
         
         {/* SVG Canvas */}
         <div className="pl-12 pb-8 pt-4 pr-4 w-full h-full relative">
-          <svg 
-            ref={svgRef}
-            className="w-full h-full bg-white border-b-2 border-l-2 border-slate-300 cursor-crosshair"
-            onClick={handleSvgClick}
-            viewBox="0 0 1000 400"
-            preserveAspectRatio="none"
-          >
-            {/* Grid lines */}
-            {[2200, 2400, 2600, 2800].map(val => {
-              const xInfo = mapValueToCoordinate(val, xMin, xMax, 1000);
-              return <line key={val} x1={xInfo} y1="0" x2={xInfo} y2="400" stroke="#e2e8f0" strokeWidth="1"/>;
+          <div className="relative w-full h-full">
+            <svg 
+              ref={svgRef}
+              className="w-full h-full bg-white border-b-2 border-l-2 border-slate-300 cursor-crosshair relative z-10"
+              onClick={handleSvgClick}
+              viewBox="0 0 1000 400"
+              preserveAspectRatio="none"
+            >
+              {/* Grid lines */}
+              {[2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900].map(val => {
+                const xInfo = mapValueToCoordinate(val, xMin, xMax, 1000);
+                return <line key={val} x1={xInfo} y1="0" x2={xInfo} y2="400" stroke="#f1f5f9" strokeWidth="1"/>;
+              })}
+              {[500, 600, 700].map(val => {
+                const yInfo = 400 - mapValueToCoordinate(val, yMin, yMax, 400);
+                return <line key={val} x1="0" y1={yInfo} x2="1000" y2={yInfo} stroke="#f1f5f9" strokeWidth="1"/>;
+              })}
+
+              {/* Target Data (auto generated when toggle is on) */}
+              {showAuto && targetData.map((d, i) => {
+                const cx = mapValueToCoordinate(d.hujan, xMin, xMax, 1000);
+                const cy = 400 - mapValueToCoordinate(d.panen, yMin, yMax, 400);
+                return (
+                  <circle key={`target-${i}`} cx={cx} cy={cy} r="6" fill="#10b981" />
+                )
+              })}
+
+              {/* User plotted points */}
+              {points.map((p, i) => {
+                const cx = mapValueToCoordinate(p.x, xMin, xMax, 1000);
+                const cy = 400 - mapValueToCoordinate(p.y, yMin, yMax, 400);
+                return (
+                  <circle key={`user-${i}`} cx={cx} cy={cy} r="5" fill="#ef4444" opacity="0.8" />
+                )
+              })}
+            </svg>
+            
+            {/* Axis Labels (X) */}
+            {[2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900].map(val => {
+              const leftPercent = mapValueToCoordinate(val, xMin, xMax, 100);
+              return (
+                <div 
+                  key={`lbl-x-${val}`} 
+                  className="absolute bottom-0 text-[10px] text-slate-500 whitespace-nowrap" 
+                  style={{ left: `${leftPercent}%`, transform: 'translate(-50%, 120%)' }}
+                >
+                  {val}
+                </div>
+              );
             })}
+            
+            {/* Axis Labels (Y) */}
             {[500, 600, 700].map(val => {
-              const yInfo = 400 - mapValueToCoordinate(val, yMin, yMax, 400);
-              return <line key={val} x1="0" y1={yInfo} x2="1000" y2={yInfo} stroke="#e2e8f0" strokeWidth="1"/>;
-            })}
-
-            {/* Target Data (auto generated when toggle is on) */}
-            {showAuto && targetData.map((d, i) => {
-              const cx = mapValueToCoordinate(d.hujan, xMin, xMax, 1000);
-              const cy = 400 - mapValueToCoordinate(d.panen, yMin, yMax, 400);
+              const bottomPercent = mapValueToCoordinate(val, yMin, yMax, 100);
               return (
-                <circle key={`target-${i}`} cx={cx} cy={cy} r="6" fill="#10b981" />
-              )
+                <div 
+                  key={`lbl-y-${val}`} 
+                  className="absolute left-0 text-[10px] text-slate-500 whitespace-nowrap" 
+                  style={{ bottom: `${bottomPercent}%`, transform: 'translate(-120%, 50%)' }}
+                >
+                  {val}
+                </div>
+              );
             })}
-
-            {/* User plotted points */}
-            {points.map((p, i) => {
-              const cx = mapValueToCoordinate(p.x, xMin, xMax, 1000);
-              const cy = 400 - mapValueToCoordinate(p.y, yMin, yMax, 400);
-              return (
-                <circle key={`user-${i}`} cx={cx} cy={cy} r="5" fill="#ef4444" opacity="0.8" />
-              )
-            })}
-          </svg>
+          </div>
           
           {/* X Axis Label */}
           <div className="absolute bottom-1 left-0 w-full text-center text-xs font-medium text-slate-500">
